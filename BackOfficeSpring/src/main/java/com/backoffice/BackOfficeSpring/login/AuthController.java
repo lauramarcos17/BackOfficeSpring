@@ -24,18 +24,22 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
         Optional<Usuario> usuario = usuarioRepository.findByNombreAndContrasena(
             loginRequest.getNombre(), loginRequest.getContrasena());
-
+        
+            Optional<Usuario> usuarioPorNombre = usuarioRepository.findByNombre(loginRequest.getNombre());
+        
         Map<String, Object> response = new HashMap<>();
         response.put("success", usuario.isPresent());
-
+        if (!usuario.isPresent() && usuarioPorNombre.isEmpty() ) {
+            response.put("errorMsg", "Usuario no encontrado");
+        }else{
+            response.put("errorMsg", "Contraseña incorrecta");
+        }
+            
+        
+        response.put("errorMessage", usuario.isPresent());
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/prueba")
-    public ResponseEntity<Map<String, String>> pruebaEndpoint() {
-        Map<String, String> response = new HashMap<>();
-        response.put("mensaje", "Este es un texto plano de prueba");
-        return ResponseEntity.ok(response);
-    }
+    
 }
 
