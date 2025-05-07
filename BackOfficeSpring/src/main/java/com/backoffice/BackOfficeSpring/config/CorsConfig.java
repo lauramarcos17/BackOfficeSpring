@@ -22,6 +22,7 @@ public class CorsConfig {
             .authorizeHttpRequests(auth -> auth
                 .anyRequest().permitAll()
             );
+            
 
         return http.build();
     }
@@ -29,8 +30,12 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200")); // Orígenes permitidos
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        
+        config.setAllowedOrigins(List.of(
+            "http://localhost:4200",
+            "http://backoffice.practicas", // Ojo: sin ruta /awj-back/backoffice/api
+            "http://backoffice.practicas:4200")); // Orígenes permitidos
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "FETCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // Si estás usando cookies o headers de autenticación
 

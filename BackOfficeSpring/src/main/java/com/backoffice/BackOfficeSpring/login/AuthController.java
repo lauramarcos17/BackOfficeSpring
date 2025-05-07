@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api")
@@ -55,6 +59,19 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    
+
+    @GetMapping("/clientes")
+    public ResponseEntity<String> obtenerCliente(@RequestParam("id") int idCliente) {
+        String url = "http://backoffice.practicas/awj-back/backoffice/api/clientes?id_cliente=" + idCliente;
+
+        RestTemplate restTemplate = new RestTemplate();
+        String respuesta = restTemplate.getForObject(url, String.class);
+
+        return ResponseEntity.ok(respuesta);
+    }
+}
+
     /*
      * Antes de eliminar findByNombreAndContrasena
      *     @PostMapping("/login") 
@@ -83,5 +100,5 @@ public class AuthController {
      */
 
     
-}
+
 
