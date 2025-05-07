@@ -22,19 +22,11 @@ public class AuthController {
     @Autowired
     private Rolrepository rolRepository;
     
-    
-
     @PostMapping("/login") 
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
-        //Optional<Usuario> usuario = usuarioRepository.findByNombreAndContrasena(
-            //loginRequest.getNombre(), encoder.encode(loginRequest.getContrasena()));
-            // System.out.println("****PASS ORIGINAL: "+ loginRequest.getContrasena());
-            // System.out.println("****PAss HASHEADA: " + encoder.encode(loginRequest.getContrasena()));
-        
+       
             Optional<Usuario> usuarioPorNombre = usuarioRepository.findByNombre(loginRequest.getNombre());
 
-            
-        
         Map<String, Object> response = new HashMap<>();
         //response.put("success", usuario.isPresent());
         if (usuarioPorNombre.isPresent()) {
