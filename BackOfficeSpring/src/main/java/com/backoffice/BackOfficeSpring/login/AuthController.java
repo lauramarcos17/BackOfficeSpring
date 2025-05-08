@@ -64,10 +64,15 @@ public class AuthController {
     @GetMapping("/clientes")
     public ResponseEntity<String> obtenerCliente(@RequestParam("id") int idCliente) {
         String url = "http://backoffice.practicas/awj-back/backoffice/api/clientes?id_cliente=" + idCliente;
-
+        String respuesta;
+        try{
         RestTemplate restTemplate = new RestTemplate();
-        String respuesta = restTemplate.getForObject(url, String.class);
-
+        respuesta= restTemplate.getForObject(url, String.class);
+        
+        } catch (Exception e) {
+        System.err.println("Error al obtener datos: " + e.getMessage());
+        return ResponseEntity.status(500).body("Error al obtener cliente: " + e.getMessage());
+        }
         return ResponseEntity.ok(respuesta);
     }
 }
