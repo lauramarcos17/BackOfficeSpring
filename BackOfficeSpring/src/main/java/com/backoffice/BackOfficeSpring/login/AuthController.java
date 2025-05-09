@@ -68,7 +68,6 @@ public class AuthController {
         try{
         RestTemplate restTemplate = new RestTemplate();
         respuesta= restTemplate.getForObject(url, String.class);
-        
         } catch (Exception e) {
         System.err.println("Error al obtener datos: " + e.getMessage());
         return ResponseEntity.status(500).body("Error al obtener cliente: " + e.getMessage());
