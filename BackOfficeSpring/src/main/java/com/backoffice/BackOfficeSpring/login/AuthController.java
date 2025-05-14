@@ -25,6 +25,8 @@ public class AuthController {
     private Usuariorepository usuarioRepository;
     @Autowired
     private Rolrepository rolRepository;
+    @Autowired
+    private BackupRepository backupRepository;
     
     @PostMapping("/login") 
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
@@ -76,19 +78,39 @@ public class AuthController {
     }
 
       @GetMapping("/generarCopiaSeguridad")
-        public ResponseEntity<String> generarCopiaSeguridad(@RequestParam("id") int idCliente) {
-         String url = "http://backoffice.practicas/awj-back/backoffice/api/genera_copia_seguridad?id_cliente=" + idCliente;
-        String respuesta;
-        try{
-        RestTemplate restTemplate = new RestTemplate();
-        respuesta= restTemplate.getForObject(url, String.class);
+        public ResponseEntity<String> generarCopiaSeguridad(@RequestParam("id") String idCliente) {
+            String url = "http://backoffice.practicas/awj-back/backoffice/api/genera_copia_seguridad?id_cliente=" + idCliente;
+            BackupRequest respuesta;
+            try{
+            RestTemplate restTemplate = new RestTemplate();
+            String rawJson = restTemplate.getForObject(url, String.class);
+            System.out.println("JSON recibido: " + rawJson);
+            respuesta= restTemplate.getForObject(url, BackupRequest.class); 
+            Backup backup = new Backup();
+            backup.setCliente(respuesta.getCliente());
+            backup.setFechaHora(respuesta.getFechaHora());
+            backup.setDescripcion(respuesta.getDescripcion());
+            backupRepository.save(backup);    
         } catch (Exception e) {
-        System.err.println("Error al obtener datos: " + e.getMessage());
-        return ResponseEntity.status(500).body("Error al generar copia: " + e.getMessage());
-        }
-        return ResponseEntity.ok(respuesta);
+            System.err.println("Error al obtener datos: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error al generar copia: " + e.getMessage());
+            }
+            return ResponseEntity.ok("Copia de seguridad generada y guardada correctamente.");
     }
 
+        // @PostMapping("/obtenerCopiasSeguridad")
+        // public ResponseEntity<String> guardarBackup(@RequestBody BackupRequest request) {
+        //     Backup backup = new Backup();
+        //     backup.setCliente(request.getCliente());
+        //     backup.setFechaHora(request.getFechaHora());
+        //     backup.setDescripcion(request.getDescripcion());
+
+        //     backupRepository.save(backup);
+
+        //     return ResponseEntity.ok("Backup guardado correctamente");
+        // }
+
+        
 }
 
     /*
