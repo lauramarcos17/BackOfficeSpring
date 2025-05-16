@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -106,9 +107,13 @@ public class AuthController {
 
 
     @GetMapping("/backups")
-    public ResponseEntity<List<Backup>> getAllBackups() {
+    public ResponseEntity<List<Backup>> getAllBackups(@RequestParam String cliente) {
+        
         List<Backup> backups = backupRepository.findAll();
-        return ResponseEntity.ok(backups);
+         System.out.println("ID recibido:*************************************************** " + cliente);
+         List<Backup> backups2= backupRepository.findByCliente(cliente);
+       
+        return ResponseEntity.ok(backups2);
     }
 }
 

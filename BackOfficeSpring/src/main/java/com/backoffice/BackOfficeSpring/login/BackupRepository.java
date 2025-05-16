@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BackupRepository  extends JpaRepository <Backup, BackupId>{ //String?? Por PK compuesta? -> clave es BackupId
 
-    Optional<Backup> findByCliente(String cliente);
+    List<Backup> findByCliente(String cliente);
     
 
 }
