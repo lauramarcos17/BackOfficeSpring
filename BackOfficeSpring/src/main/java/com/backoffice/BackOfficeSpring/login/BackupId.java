@@ -26,4 +26,9 @@ public class BackupId implements Serializable {
     public int hashCode() {
         return Objects.hash(cliente, fechaHora);
     }
+
+    // public BackupId(String cliente, String fechaHora) {
+    //     this.cliente = cliente;
+    //     this.fechaHora = fechaHora;
+    // }
 }

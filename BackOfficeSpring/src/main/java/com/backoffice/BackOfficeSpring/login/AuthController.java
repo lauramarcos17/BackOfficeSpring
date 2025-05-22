@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -115,6 +117,21 @@ public class AuthController {
        
         return ResponseEntity.ok(backups2);
     }
+
+
+
+    @DeleteMapping("/eliminarCopia")
+    public ResponseEntity<String> eliminarCopia(
+       @RequestParam("cliente") String cliente,
+       @RequestParam("fechaHora") String fechaHora) {
+       try {
+          System.out.println("cliente=" + cliente + ", fechaHora=" + fechaHora);
+           backupRepository.deleteByClienteAndFechaHora(cliente, fechaHora);
+             return ResponseEntity.ok("Copia eliminada correctamente");
+         } catch (Exception e) {
+             return ResponseEntity.status(500).body("Error al eliminar la copia: " + e.getMessage());
+         }
+     }   
 }
 
 
