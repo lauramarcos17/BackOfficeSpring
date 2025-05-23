@@ -31,6 +31,8 @@ public class AuthController {
     private BackupRepository backupRepository;
     @Autowired
     private MigracionRepository migracionRepository;
+    @Autowired
+    private LogRepository logRepository;
     
     @PostMapping("/login") 
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
@@ -239,6 +241,14 @@ public class AuthController {
             }
             return ResponseEntity.ok("Migración generada y guardada correctamente.");
     }
+
+    @PostMapping("/generarLog")
+    public ResponseEntity<Log> generarLog(@RequestBody Log log) {
+        Log savedLog = logRepository.save(log);
+        return ResponseEntity.ok(savedLog);
+    }
+
+    
 }
 
 
