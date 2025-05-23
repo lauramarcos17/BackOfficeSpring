@@ -1,7 +1,6 @@
 package com.backoffice.BackOfficeSpring.login;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 import jakarta.persistence.Column;

@@ -1,6 +1,5 @@
 package com.backoffice.BackOfficeSpring.login;
 
-import java.util.Date;
 
 public class BackupRequest { //Esto es el DTO
     
