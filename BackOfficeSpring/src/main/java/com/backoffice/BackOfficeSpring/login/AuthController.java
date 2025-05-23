@@ -194,6 +194,51 @@ public class AuthController {
         List<Migracion> migraciones = migracionRepository.findAll();
         return ResponseEntity.ok(migraciones);
     }
+
+
+    ///eliminarMigracion
+    @DeleteMapping("/eliminarMigracion")
+    public ResponseEntity<String> eliminarMigracion(
+       @RequestParam("clienteOrigen") String clienteOrigen,
+       @RequestParam("fechaHoraInicioOperacion") String fechaHoraInicioOperacion) {
+       try {
+          System.out.println("cliente=" + clienteOrigen + ", fechaHora=" + fechaHoraInicioOperacion);
+           migracionRepository.deleteByClienteOrigenAndFechaHoraInicioOperacion(clienteOrigen, fechaHoraInicioOperacion);
+             return ResponseEntity.ok("Migracion eliminada correctamente");
+         } catch (Exception e) {
+             return ResponseEntity.status(500).body("Error al eliminar la copia: " + e.getMessage());
+         }
+     }
+     
+     
+      @GetMapping("/restaurarMigracion")
+        public ResponseEntity<String> restaurarMigracion(@RequestParam("clienteOrigen") String clienteOrigen, @RequestParam("clienteDestino") String clienteDestino) {
+            String url = "http://backoffice.practicas/awj-back/backoffice/api/restaura_migracion?id_cliente_origen=" + clienteOrigen+"&id_cliente_destino="+clienteDestino;
+            MigracionRequest respuesta;
+             
+            try{
+                RestTemplate restTemplate = new RestTemplate();
+                String rawJson = restTemplate.getForObject(url, String.class);
+                System.out.println("JSON recibido: " + rawJson);
+
+                //Obtenemos la respuesta parseada como objeto tipo backup para luego obtener sus campos 
+                respuesta= restTemplate.getForObject(url, MigracionRequest.class); 
+                Migracion migracion = new Migracion();
+                migracion.setClienteOrigen(respuesta.getClienteOrigen());
+                migracion.setClienteDestino(respuesta.getClienteDestino());
+                migracion.setFechaHoraInicioOperacion(respuesta.getFechaHoraInicioOperacion());
+                migracion.setFechaHoraFinOperacion(respuesta.getFechaHoraFinOperacion());
+                migracion.setOperacion(respuesta.getOperacion());
+                migracion.setResultado(respuesta.getResultado());
+                migracion.setDescripcion(respuesta.getDescripcion());
+                migracionRepository.save(migracion);    //guardamos en base de datos
+
+            } catch (Exception e) {
+                System.err.println("Error al obtener datos: " + e.getMessage());
+                return ResponseEntity.status(500).body("Error al generar migración: " + e.getMessage());
+            }
+            return ResponseEntity.ok("Migración generada y guardada correctamente.");
+    }
 }
 
 
