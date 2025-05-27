@@ -253,6 +253,13 @@ public class AuthController {
         return ResponseEntity.ok(savedLog);
     }
 
+    @GetMapping("/logs")
+    public ResponseEntity<List<Log>> getAllLogs(@RequestParam String cliente) {
+        System.out.println("ID recibido:*************************************************** " + cliente);
+        List<Log> logs = logRepository.findByCliente(cliente);
+        return ResponseEntity.ok(logs);
+    }
+    
     
 }
 
