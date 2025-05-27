@@ -85,7 +85,7 @@ public class AuthController {
     }
 
       @GetMapping("/generarCopiaSeguridad")
-        public ResponseEntity<String> generarCopiaSeguridad(@RequestParam("id") String idCliente) {
+        public ResponseEntity<Backup> generarCopiaSeguridad(@RequestParam("id") String idCliente) {
             String url = "http://backoffice.practicas/awj-back/backoffice/api/genera_copia_seguridad?id_cliente=" + idCliente;
             BackupRequest respuesta;
              
@@ -93,7 +93,7 @@ public class AuthController {
                 RestTemplate restTemplate = new RestTemplate();
                 String rawJson = restTemplate.getForObject(url, String.class);
                 System.out.println("JSON recibido: " + rawJson);
-
+                
                 //Obtenemos la respuesta parseada como objeto tipo backup para luego obtener sus campos 
                 respuesta= restTemplate.getForObject(url, BackupRequest.class); 
                 Backup backup = new Backup();
@@ -101,12 +101,14 @@ public class AuthController {
                 backup.setFechaHora(respuesta.getFechaHora());
                 backup.setDescripcion(respuesta.getDescripcion());
                 backupRepository.save(backup);    //guardamos en base de datos
+                
+                return ResponseEntity.ok(backup);//mando la info 
 
             } catch (Exception e) {
                 System.err.println("Error al obtener datos: " + e.getMessage());
-                return ResponseEntity.status(500).body("Error al generar copia: " + e.getMessage());
+                return ResponseEntity.status(500).body(null);
             }
-            return ResponseEntity.ok("Copia de seguridad generada y guardada correctamente.");
+            
     }
 
 
@@ -137,7 +139,7 @@ public class AuthController {
      
      
      @GetMapping("/restaurarCopia")
-        public ResponseEntity<String> restaurarCopiaSeguridad(@RequestParam("id") String idCliente) {
+        public ResponseEntity<Backup> restaurarCopiaSeguridad(@RequestParam("id") String idCliente) {
             String url = "http://backoffice.practicas/awj-back/backoffice/api/restaura_copia_seguridad?id_cliente=" + idCliente;
             BackupRequest respuesta;
              
@@ -153,26 +155,28 @@ public class AuthController {
                 backup.setFechaHora(respuesta.getFechaHora());
                 backup.setDescripcion(respuesta.getDescripcion());
                 backupRepository.save(backup);    //guardamos en base de datos
-
+                 return ResponseEntity.ok(backup);
             } catch (Exception e) {
                 System.err.println("Error al obtener datos: " + e.getMessage());
-                return ResponseEntity.status(500).body("Error al generar copia: " + e.getMessage());
+                return ResponseEntity.status(500).body(null);
             }
-            return ResponseEntity.ok("Copia de seguridad generada y guardada correctamente.");
+           
     }
 
     @GetMapping("/generarMigracion")
-        public ResponseEntity<String> generarMigracion(@RequestParam("clienteOrigen") String clienteOrigen ,@RequestParam("clienteDestino") String clienteDestino) {
+        public ResponseEntity<Migracion> generarMigracion(@RequestParam("clienteOrigen") String clienteOrigen ,@RequestParam("clienteDestino") String clienteDestino) {
             String url = "http://backoffice.practicas/awj-back/backoffice/api/crea_migracion?id_cliente_origen=" + clienteOrigen+ "&id_cliente_destino=" + clienteDestino;
-            MigracionRequest respuesta;
+            
              
             try{
                 RestTemplate restTemplate = new RestTemplate();
-                String rawJson = restTemplate.getForObject(url, String.class);
-                System.out.println("JSON recibido: " + rawJson);
+              //  String rawJson = restTemplate.getForObject(url, String.class);
+               // System.out.println("JSON recibido: " + rawJson);
 
                 //Obtenemos la respuesta parseada como objeto tipo migracion para luego obtener sus campos 
-                respuesta= restTemplate.getForObject(url, MigracionRequest.class); 
+               // respuesta= restTemplate.getForObject(url, MigracionRequest.class); 
+                
+                 MigracionRequest respuesta = restTemplate.getForObject(url, MigracionRequest.class);
                
                 Migracion migracion=new Migracion();
                 migracion.setClienteOrigen(respuesta.getClienteOrigen());
@@ -182,13 +186,14 @@ public class AuthController {
                 migracion.setOperacion(respuesta.getOperacion());
                 migracion.setResultado(respuesta.getResultado());
                 migracion.setDescripcion(respuesta.getDescripcion());
-                migracionRepository.save(migracion);    //guardamos en base de datos
+                migracionRepository.save(migracion);
+                return ResponseEntity.ok(migracion);    //guardamos en base de datos
 
             } catch (Exception e) {
                 System.err.println("Error al obtener datos: " + e.getMessage());
-                return ResponseEntity.status(500).body("Error al generar copia: " + e.getMessage());
+                return ResponseEntity.status(500).body(null);
             }
-            return ResponseEntity.ok("Copia de seguridad generada y guardada correctamente.");
+            
     }
 
     @GetMapping("/migraciones")
