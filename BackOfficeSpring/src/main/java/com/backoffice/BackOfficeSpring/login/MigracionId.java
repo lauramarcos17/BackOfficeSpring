@@ -18,7 +18,8 @@ public class MigracionId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof MigracionId)) return false;
         MigracionId that = (MigracionId) o;
-        return clienteOrigen.equals(that.clienteOrigen) && fechaHoraInicioOperacion.equals(that.fechaHoraInicioOperacion);
+        return clienteOrigen.equals(that.clienteOrigen)
+         && fechaHoraInicioOperacion.equals(that.fechaHoraInicioOperacion);
     }
 
     @Override

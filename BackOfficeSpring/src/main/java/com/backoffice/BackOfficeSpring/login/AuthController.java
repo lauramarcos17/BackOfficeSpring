@@ -85,7 +85,7 @@ public class AuthController {
     }
 
       @GetMapping("/generarCopiaSeguridad")
-        public ResponseEntity<Backup> generarCopiaSeguridad(@RequestParam("id") String idCliente) {
+        public ResponseEntity<Backup> generarCopiaSeguridad(@RequestParam("id") String idCliente,@RequestParam("descripcionCopia") String descripcionCopia) {
             String url = "http://backoffice.practicas/awj-back/backoffice/api/genera_copia_seguridad?id_cliente=" + idCliente;
             BackupRequest respuesta;
              
@@ -99,7 +99,7 @@ public class AuthController {
                 Backup backup = new Backup();
                 backup.setCliente(respuesta.getCliente());
                 backup.setFechaHora(respuesta.getFechaHora());
-                backup.setDescripcion(respuesta.getDescripcion());
+                backup.setDescripcion(descripcionCopia); //le metemos descripción que recibe por parámetro
                 backupRepository.save(backup);    //guardamos en base de datos
                 
                 return ResponseEntity.ok(backup);//mando la info 
