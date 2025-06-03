@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.Modifying;
 
 import jakarta.transaction.Transactional;
 
-public interface MigracionRepository  extends JpaRepository <Migracion, MigracionId>{ //String?? Por PK compuesta? -> clave es MIGRACIONID
+public interface MigracionRepository  extends JpaRepository <Migracion, Integer>{ //String?? Por PK compuesta? -> clave es MIGRACIONID
 
     List<Migracion> findByClienteOrigen(String clienteOrigen);
+    List<Migracion> findByClienteOrigenOrClienteDestino(String clienteOrigen, String clienteDestino);
 
     @Transactional
     @Modifying
-    void deleteByClienteOrigenAndFechaHoraInicioOperacion(String clienteOrigen, String fechaHoraInicioOperacion);
+    void deleteById(int id);
     
 
 }

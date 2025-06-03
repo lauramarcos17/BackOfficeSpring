@@ -3,7 +3,8 @@ package com.backoffice.BackOfficeSpring.login;
 
 public class MigracionRequest { //Esto es el DTO
     
-     private String clienteOrigen;
+    private int id;
+    private String clienteOrigen;
     private String fechaHoraInicioOperacion;
     private String clienteDestino;
     private String fechaHoraFinOperacion;
@@ -11,6 +12,12 @@ public class MigracionRequest { //Esto es el DTO
     private String resultado;
     private String descripcion;
    
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getClienteOrigen() {
         return clienteOrigen;
     }

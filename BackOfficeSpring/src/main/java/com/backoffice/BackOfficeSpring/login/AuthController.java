@@ -18,6 +18,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+
+
 @RestController
 @RequestMapping("/api")
 public class AuthController {
@@ -197,8 +202,8 @@ public class AuthController {
     }
 
     @GetMapping("/migraciones")
-    public ResponseEntity<List<Migracion>> getMigraciones() {
-        List<Migracion> migraciones = migracionRepository.findAll();
+    public ResponseEntity<List<Migracion>> getMigraciones(@RequestParam String idCliente) {
+        List<Migracion> migraciones = migracionRepository.findByClienteOrigenOrClienteDestino(idCliente, idCliente);
         return ResponseEntity.ok(migraciones);
     }
 
@@ -206,20 +211,23 @@ public class AuthController {
     ///eliminarMigracion
     @DeleteMapping("/eliminarMigracion")
     public ResponseEntity<String> eliminarMigracion(
-       @RequestParam("clienteOrigen") String clienteOrigen,
-       @RequestParam("fechaHoraInicioOperacion") String fechaHoraInicioOperacion) {
+       @RequestParam("id") int id)
+        {
        try {
-          System.out.println("cliente=" + clienteOrigen + ", fechaHora=" + fechaHoraInicioOperacion);
-           migracionRepository.deleteByClienteOrigenAndFechaHoraInicioOperacion(clienteOrigen, fechaHoraInicioOperacion);
+          //System.out.println("cliente=" + clienteOrigen + ", fechaHora=" + fechaHoraInicioOperacion);
+           migracionRepository.deleteById(id);
              return ResponseEntity.ok("Migracion eliminada correctamente");
          } catch (Exception e) {
              return ResponseEntity.status(500).body("Error al eliminar la copia: " + e.getMessage());
          }
      }
      
+     static class IdMigracion {
+        public String id;
+    }
      
-      @GetMapping("/restaurarMigracion")
-        public ResponseEntity<String> restaurarMigracion(@RequestParam("clienteOrigen") String clienteOrigen, @RequestParam("clienteDestino") String clienteDestino) {
+      @PostMapping("/restaurarMigracion")
+        public ResponseEntity<String> restaurarMigracion(@RequestParam("clienteOrigen") String clienteOrigen, @RequestParam("clienteDestino") String clienteDestino, @RequestBody String idMigracion) {
             String url = "http://backoffice.practicas/awj-back/backoffice/api/restaura_migracion?id_cliente_origen=" + clienteOrigen+"&id_cliente_destino="+clienteDestino;
             MigracionRequest respuesta;
              
@@ -237,7 +245,20 @@ public class AuthController {
                 migracion.setFechaHoraFinOperacion(respuesta.getFechaHoraFinOperacion());
                 migracion.setOperacion(respuesta.getOperacion());
                 migracion.setResultado(respuesta.getResultado());
-                migracion.setDescripcion(respuesta.getDescripcion());
+                // migracion.setDescripcion(respuesta.getDescripcion());
+                /*
+                 * 
+                 * 
+                 */
+                 
+                ObjectMapper mapper = new ObjectMapper();
+                IdMigracion obj = mapper.readValue(idMigracion, IdMigracion.class);
+              
+
+                String aux = "La restauración de la migración con id "+obj.id+" se ha realizado con éxito";
+               
+                
+                migracion.setDescripcion(aux);
                 migracionRepository.save(migracion);    //guardamos en base de datos
 
             } catch (Exception e) {

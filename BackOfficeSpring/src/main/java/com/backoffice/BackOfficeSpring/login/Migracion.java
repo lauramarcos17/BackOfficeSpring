@@ -3,21 +3,27 @@ package com.backoffice.BackOfficeSpring.login;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+
 import jakarta.persistence.Table;
 
 @Entity
-@IdClass(MigracionId.class)
-@Table(name="Migracion")
+@Table(name="Migracion2")
 public class Migracion{
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private int id;
+
+ 
     @Column(name ="clienteOrigen")
     private String clienteOrigen;
     
    
-    @Id
+    
     @Column(name = "fechaHoraInicioOperacion")
     private String fechaHoraInicioOperacion;
 
@@ -29,7 +35,12 @@ public class Migracion{
     private String descripcion;
 
 
-
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getClienteOrigen() {
         return clienteOrigen;
     }
