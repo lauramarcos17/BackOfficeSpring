@@ -3,6 +3,7 @@ package com.backoffice.BackOfficeSpring.login;
 
 public class LogRequest { //Esto es el DTO
     
+    private int id;   
     private String fechaInicio;
     private String fechaFin;
     private String usuario;
@@ -10,7 +11,12 @@ public class LogRequest { //Esto es el DTO
     private String cuaderno;
     private String cliente;
 
-    
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getFechaInicio() {
         return fechaInicio;
     }

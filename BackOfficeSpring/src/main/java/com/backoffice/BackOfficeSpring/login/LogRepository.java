@@ -6,14 +6,14 @@ import org.springframework.data.jpa.repository.Modifying;
 
 import jakarta.transaction.Transactional;
 
-public interface LogRepository  extends JpaRepository <Log, LogId>{ //String?? Por PK compuesta? -> clave es LogId
+public interface LogRepository  extends JpaRepository <Log, Integer>{ //String?? Por PK compuesta? -> clave es LogId
 
     List<Log> findByUsuario(String usuario);
      List<Log> findByCliente(String cliente);
 
     @Transactional
     @Modifying
-    void deleteByUsuarioAndFechaInicio(String usuario, String fechaInicio);
+    void deleteById(int id);
     
 
 }

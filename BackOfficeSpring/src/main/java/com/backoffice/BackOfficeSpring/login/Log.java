@@ -2,20 +2,25 @@ package com.backoffice.BackOfficeSpring.login;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 
 @Entity
-@IdClass(LogId.class)
-@Table(name="Logs")
+@Table(name="Logs2")
 public class Log {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name="id")
+    private int id;
+
+    
     @Column(name ="usuario")
     private String usuario;
 
-    @Id
+  
     @Column(name = "fechaInicio")
     private String fechaInicio;
 
@@ -25,6 +30,12 @@ public class Log {
     private String cliente;
     private String cuaderno;
 
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsuario() {
         return usuario;
