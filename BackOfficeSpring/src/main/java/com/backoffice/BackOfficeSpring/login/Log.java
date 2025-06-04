@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Logs2")
+@Table(name="Logs3")
 public class Log {
     
     @Id
@@ -19,13 +19,14 @@ public class Log {
     
     @Column(name ="usuario")
     private String usuario;
-
+     
+    
   
     @Column(name = "fechaInicio")
     private String fechaInicio;
 
     private String fechaFin;
-    
+    private String rol;
     private String operacion;
     private String cliente;
     private String cuaderno;
@@ -35,6 +36,12 @@ public class Log {
     }
     public void setId(int id) {
         this.id = id;
+    }
+    public String getRol() {
+        return rol;
+    }
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     public String getUsuario() {

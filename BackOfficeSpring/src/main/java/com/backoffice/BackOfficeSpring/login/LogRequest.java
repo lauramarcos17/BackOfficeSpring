@@ -7,6 +7,7 @@ public class LogRequest { //Esto es el DTO
     private String fechaInicio;
     private String fechaFin;
     private String usuario;
+    private String rol;
     private String operacion;
     private String cuaderno;
     private String cliente;
@@ -52,6 +53,12 @@ public class LogRequest { //Esto es el DTO
     }
     public void setCliente(String cliente) {
         this.cliente = cliente;
+    }
+    public String getRol() {
+        return rol;
+    }
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     

@@ -10,6 +10,8 @@ public interface LogRepository  extends JpaRepository <Log, Integer>{ //String??
 
     List<Log> findByUsuario(String usuario);
      List<Log> findByCliente(String cliente);
+      List<Log> findByRol(String rol);
+    List<Log> findByRolAndCliente(String rol, String cliente);
 
     @Transactional
     @Modifying

@@ -180,9 +180,9 @@ public class AuthController {
 
                 //Obtenemos la respuesta parseada como objeto tipo migracion para luego obtener sus campos 
                // respuesta= restTemplate.getForObject(url, MigracionRequest.class); 
-                
+                  
                  MigracionRequest respuesta = restTemplate.getForObject(url, MigracionRequest.class);
-               
+                
                 Migracion migracion=new Migracion();
                 migracion.setClienteOrigen(respuesta.getClienteOrigen());
                 migracion.setClienteDestino(respuesta.getClienteDestino());
@@ -227,7 +227,8 @@ public class AuthController {
     }
      
       @PostMapping("/restaurarMigracion")
-        public ResponseEntity<String> restaurarMigracion(@RequestParam("clienteOrigen") String clienteOrigen, @RequestParam("clienteDestino") String clienteDestino, @RequestBody String idMigracion) {
+        public ResponseEntity<String> restaurarMigracion(@RequestParam("clienteOrigen") String clienteOrigen, @RequestParam("clienteDestino") String clienteDestino,
+         @RequestBody String idMigracion) {
             String url = "http://backoffice.practicas/awj-back/backoffice/api/restaura_migracion?id_cliente_origen=" + clienteOrigen+"&id_cliente_destino="+clienteDestino;
             MigracionRequest respuesta;
              
@@ -245,16 +246,10 @@ public class AuthController {
                 migracion.setFechaHoraFinOperacion(respuesta.getFechaHoraFinOperacion());
                 migracion.setOperacion(respuesta.getOperacion());
                 migracion.setResultado(respuesta.getResultado());
-                // migracion.setDescripcion(respuesta.getDescripcion());
-                /*
-                 * 
-                 * 
-                 */
                  
                 ObjectMapper mapper = new ObjectMapper();
                 IdMigracion obj = mapper.readValue(idMigracion, IdMigracion.class);
-              
-
+            
                 String aux = "La restauración de la migración con id "+obj.id+" se ha realizado con éxito";
                
                 
@@ -275,9 +270,9 @@ public class AuthController {
     }
 
     @GetMapping("/logs")
-    public ResponseEntity<List<Log>> getAllLogs(@RequestParam String cliente) {
+    public ResponseEntity<List<Log>> getAllLogs(@RequestParam String cliente,@RequestParam String rol) {
         System.out.println("ID recibido:*************************************************** " + cliente);
-        List<Log> logs = logRepository.findByCliente(cliente);
+        List<Log> logs = logRepository.findByRolAndCliente(rol,cliente);
         return ResponseEntity.ok(logs);
     }
     
