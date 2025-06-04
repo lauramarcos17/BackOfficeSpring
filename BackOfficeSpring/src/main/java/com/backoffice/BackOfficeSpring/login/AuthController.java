@@ -272,8 +272,23 @@ public class AuthController {
     @GetMapping("/logs")
     public ResponseEntity<List<Log>> getAllLogs(@RequestParam String cliente,@RequestParam String rol) {
         System.out.println("ID recibido:*************************************************** " + cliente);
-        List<Log> logs = logRepository.findByRolAndCliente(rol,cliente);
-        return ResponseEntity.ok(logs);
+        if(rol.equals("Administrador"))
+        {
+            List<Log> logs = logRepository.findByCliente(cliente);
+            return ResponseEntity.ok(logs);
+        }
+        // para que el backoffice visualice lo de supervisor y backoffice
+        if (rol.equals("Backoffice")) {
+            List<Log> logs = logRepository.findByRolAndCliente("Supervisor",cliente);
+            List<Log> logsRol = logRepository.findByRolAndCliente(rol, cliente);
+            logs.addAll(logsRol);
+            return ResponseEntity.ok(logs);
+            
+        } else {
+            List<Log> logs = logRepository.findByRolAndCliente(rol, cliente);
+            return ResponseEntity.ok(logs);
+        }
+        
     }
     
     
