@@ -56,11 +56,12 @@ public class AuthController {
                 response.put("errorMsg", "");
                 Optional<Rol> rolPorId = rolRepository.findById(usuarioBD.getRol());
                 Rol rolBD=rolPorId.get();
-                
                 response.put("rolnombre",rolBD.getNombre());
                 response.put("rol", usuarioBD.getRol());
-                
 
+                // Generar token JWT para luego recibirlo en angular le paso el rol para que tambien filtre por rol los endpoint
+                String token = JwtUtil.generateToken(usuarioBD.getNombre(),rolBD.getNombre());
+                response.put("token", token);
             }else{
                 response.put("success", false);
                 response.put("errorMsg", "Contraseña incorrecta");
